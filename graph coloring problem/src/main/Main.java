@@ -1,4 +1,4 @@
-package sample;
+package main;
 
 public class Main {
     final static int qtdCores = 3; //MAIOR QUE 3 PARA QUE FUNCIONE E MENOR QUE O NUMERO DE VERTICES
