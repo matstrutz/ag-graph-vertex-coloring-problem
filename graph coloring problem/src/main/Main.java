@@ -33,13 +33,13 @@ public class Main {
 
     public static int verificaColisao(int[][] matCarregada, int[] vetCor){
         int cont = 0;
-        for (int i = 0; i < matCarregada.length; i++) {
-            int [] vetAux = new int[2];
+        for (int[] mat : matCarregada) {
+            int[] vetAux = new int[2];
             for (int j = 0; j < matCarregada[0].length; j++) {
-                vetAux[j] = matCarregada[i][j];
+                vetAux[j] = mat[j];
             }
 
-            if(vetCor[vetAux[0] - 1] == vetCor[vetAux[1] - 1]){
+            if (vetCor[vetAux[0] - 1] == vetCor[vetAux[1] - 1]) {
                 cont++;
             }
         }
