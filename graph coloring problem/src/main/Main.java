@@ -1,51 +1,56 @@
 package main;
 
 public class Main {
-    final static int qtdCores = 3; //MAIOR QUE 3 PARA QUE FUNCIONE E MENOR QUE O NUMERO DE VERTICES
+    final static int qtdCores = 3; //MAIOR QUE 3 PARA QUE FUNCIONE
+    final static int tamPopulacao = 100;
 
     public static void main(String[] args) {
         int[][] matrizCarregada = MatAndVetRelated.matrizTeste();
 
-        int[][] matAdjacente = new int[matrizCarregada[matrizCarregada.length-1][matrizCarregada[0].length-1]][matrizCarregada[matrizCarregada.length-1][matrizCarregada[0].length-1]];
+        Cromossomo[] cromossomos = new Cromossomo[tamPopulacao];
 
-        matAdjacente = montarMatrizAdjacente(matAdjacente, matrizCarregada);
+        loopPopulacao(matrizCarregada, cromossomos);
+    }
 
+    public static Cromossomo resultado(int[][] matrizCarregada){
         int[] vetCorPar = new int[matrizCarregada[matrizCarregada.length-1][matrizCarregada[0].length-1]];
+
+        Cromossomo cromossomo = new Cromossomo();
 
         vetCorPar = MatAndVetRelated.popularCores(vetCorPar, qtdCores);
 
-        int colisao = verificarColisao(matAdjacente, vetCorPar);
+        int colisao = verificaColisao(matrizCarregada, vetCorPar);
+
         MatAndVetRelated.printarVetorPadrao(vetCorPar);
+        System.out.print("- " + colisao);
         System.out.println("");
-        MatAndVetRelated.printarMatrizPadrao(matAdjacente);
-        System.out.println("");
-        System.out.println(colisao);
+
+        cromossomo.setCromossomo(vetCorPar);
+        cromossomo.setFitness(colisao);
+
+        return cromossomo;
     }
 
-    public static int[][] montarMatrizAdjacente(int [][] matrizAdjavente, int [][] matrizCarregada){
-        for (int i = 0; i < matrizCarregada.length; i++) {
-            int [] vet = new int[matrizCarregada[0].length];
-            for (int j = 0; j < matrizCarregada[0].length; j++) {
-                vet[j] = matrizCarregada[i][j];
-            }
-
-            matrizAdjavente[vet[0] - 1][vet[1] - 1] = 1;
-            matrizAdjavente[vet[1] - 1][vet[0] - 1] = 1;
-        }
-
-        return matrizAdjavente;
-    }
-
-    public static int verificarColisao(int matriz[][], int vetor[]){
+    public static int verificaColisao(int[][] matCarregada, int[] vetCor){
         int cont = 0;
-        for (int i = 0; i < matriz.length; i++) {
-            for (int j = 0; j < matriz[0].length; j++) {
-                if(matriz[i][j] == 1 && vetor[i] == vetor[j] && (i != j) ){
-                    cont++;
-                }
+        for (int i = 0; i < matCarregada.length; i++) {
+            int [] vetAux = new int[2];
+            for (int j = 0; j < matCarregada[0].length; j++) {
+                vetAux[j] = matCarregada[i][j];
+            }
+
+            if(vetCor[vetAux[0] - 1] == vetCor[vetAux[1] - 1]){
+                cont++;
             }
         }
 
-        return cont / 2;
+        return cont;
+    }
+
+    public static void loopPopulacao(int[][] matrizCarregada, Cromossomo[] cromossomos){
+        for (int i = 0; i < cromossomos.length; i++) {
+            System.out.print(CoisasBobas.inteiroFormatado(i + 1) + " -");
+            cromossomos[i] = resultado(matrizCarregada);
+        }
     }
 }
