@@ -1,2 +1,2 @@
 # ag-graph-vertex-coloring-problem
-Algoritmo genético para resolver oproblema de coloração de vértices
+Algoritmo genético para resolver o problema de coloração de vértices
