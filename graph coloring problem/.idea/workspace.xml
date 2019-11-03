@@ -89,6 +89,7 @@
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Mateus\Documents\GitHub\ag-graph-vertex-coloring-problem\graph coloring problem\src\main" />
       <recent name="C:\Users\Mateus\Downloads\AG\graph coloring problem\src" />
       <recent name="C:\Users\Mateus\Downloads\AG\graph coloring problem\src\sample" />
     </key>
@@ -211,5 +212,12 @@
   <component name="VcsManagerConfiguration">
     <option name="OFFER_MOVE_TO_ANOTHER_CHANGELIST_ON_PARTIAL_COMMIT" value="true" />
     <option name="INCLUDE_TEXT_INTO_SHELF" value="false" />
+  </component>
+  <component name="XDebuggerManager">
+    <watches-manager>
+      <configuration name="Application">
+        <watch expression="cromossomos" />
+      </configuration>
+    </watches-manager>
   </component>
 </project>
