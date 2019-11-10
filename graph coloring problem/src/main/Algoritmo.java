@@ -27,22 +27,22 @@ public class Algoritmo {
             this.vet = cromossomo.getCromossomo();
         }
 
-        void calc(int[][] matCarregada, int[] vetCor) {
-            double cont = 0;
-            for (int[] mat : matCarregada) {
-                int[] vetAux = new int[2];
-                for (int j = 0; j < matCarregada[0].length; j++) {
-                    vetAux[j] = mat[j];
-                }
-
-                if (vetCor[vetAux[0] - 1] == vetCor[vetAux[1] - 1]) {
-                    cont = cont + 1;
-                }
-            }
-
-
-            this.fitness = cont;
-        }
+//        void calc(int[][] matCarregada, int[] vetCor) {
+//            double cont = 0;
+//            for (int[] mat : matCarregada) {
+//                int[] vetAux = new int[2];
+//                for (int j = 0; j < matCarregada[0].length; j++) {
+//                    vetAux[j] = mat[j];
+//                }
+//
+//                if (vetCor[vetAux[0] - 1] == vetCor[vetAux[1] - 1]) {
+//                    cont = cont + 1;
+//                }
+//            }
+//
+//
+//            this.fitness = cont;
+//        }
 
         String ResultadoFinal() {
             String fitness = casasDecimais.format(this.fitness);
@@ -102,18 +102,14 @@ public class Algoritmo {
 
         static Cromossomo[] gen(Cromossomo[] pais) {
             Cromossomo[] filhos = new Cromossomo[2];
-            filhos[0] = new Cromossomo(pais[0].getNumGenes());
-            filhos[1] = new Cromossomo(pais[0].getNumGenes());
             int genInt;
-            for (int i = 0; i < pais[0].getNumGenes(); i++) {
-                genInt = (int) (Math.random() * 2);
-                if (genInt == 0) {
-                    filhos[0].setPosVetGene(pais[0].getPosVetGene(i), i);
-                    filhos[1].setPosVetGene(pais[1].getPosVetGene(i), i);
-                } else {
-                    filhos[0].setPosVetGene(pais[1].getPosVetGene(i), i);
-                    filhos[1].setPosVetGene(pais[0].getPosVetGene(i), i);
-                }
+            genInt = (int) (Math.random() * 2);
+            if (genInt == 0) {
+                filhos[0] = pais[0];
+                filhos[1] = pais[1];
+            } else {
+                filhos[0] = pais[1];
+                filhos[1] = pais[0];
             }
             return filhos;
         }
@@ -128,8 +124,8 @@ public class Algoritmo {
         }
 
         static boolean piorPai(Populacao pop, Cromossomo[] pais, Cromossomo[] filhos, int[][] mat, Resultado A, int[] vetCor) {
-            filhos[0].calc(mat, vetCor);
-            filhos[1].calc(mat, vetCor);
+//            filhos[0].calc(mat, vetCor);
+//            filhos[1].calc(mat, vetCor);
             Cromossomo melhorFilho;
             boolean cond = false;
             if (filhos[0].getFitness() < filhos[1].getFitness()) {
@@ -139,10 +135,12 @@ public class Algoritmo {
             }
             Cromossomo piorPai = pais[0].getFitness() > pais[1].getFitness() ? pais[0] : pais[1];
             if (melhorFilho.getFitness() < piorPai.getFitness()) {
-                if (!cloneCheck(pop, melhorFilho)) {
-                    melhorFilho.heranca(pais, piorPai);
-                    pop.setPosVetC(piorPai.getPosVet(), melhorFilho);
-                    cond = true;
+                if (cloneCheck(pop, melhorFilho)) {
+//                    melhorFilho.heranca(pais, piorPai);
+                    if(melhorFilho.fitness < pop.vetC[piorPai.posVet].fitness){
+                        pop.setPosVetC(piorPai.getPosVet(), melhorFilho);
+                        cond = true;
+                    }
                 }
             }
             if (pop.getTop1().getFitness() > melhorFilho.getFitness()) {
@@ -155,7 +153,7 @@ public class Algoritmo {
         static boolean cloneCheck(Populacao pop, Cromossomo melhorFilho) {
             int i = 0;
             while (i < pop.tam()) {
-                if (pop.getVetC(i).getFitness() == melhorFilho.getFitness()) {
+                if (MatAndVetRelated.verificarIdentico(pop.vetC[i].vet, melhorFilho.vet)) {
                     return true;
                 }
                 i++;
@@ -166,13 +164,13 @@ public class Algoritmo {
 
     public static class Mutacao {
 
-        static boolean Mut(Cromossomo[] filhos, int porcentGene, int chanceMut, int variacao) {
-            return mutacao(filhos, porcentGene, chanceMut, variacao);
+        static Cromossomo[] Mut(Cromossomo[] filhos, int porcentGene, boolean fazerOuNao, int variacao) {
+            return mutacao(filhos, porcentGene, fazerOuNao, variacao);
         }
 
-        static boolean mutacao(Cromossomo[] filhos, int porcentGene, int chanceMut, int variacao) {
-            if (chanceMut <= (int) (Math.random() * 100)) {
-                return false;
+        static Cromossomo[] mutacao(Cromossomo[] filhos, int porcentGene, boolean fazerOuNao, int variacao) {
+            if (!fazerOuNao) {
+                return filhos;
             }
             int numGenes = (filhos[0].getNumGenes() * porcentGene) / 100;
             if (numGenes == 0) {
@@ -184,8 +182,8 @@ public class Algoritmo {
             }
             int aux, p1, p2;
             for (int i = 0; i < vetPos.length; i++) {
-                p1 = (int) (Math.random() * (variacao + 1));
-                p2 = (int) (Math.random() * (variacao + 1));
+                p1 = (int) ((Math.random() * (variacao)) + 1 );
+                p2 = (int) ((Math.random() * (variacao)) + 1 );
                 aux = vetPos[p1];
                 vetPos[p1] = vetPos[p2];
                 vetPos[p2] = aux;
@@ -195,7 +193,7 @@ public class Algoritmo {
                 filhos[0].setPosVetGene(novoGen, vetPos[i]);
                 filhos[1].setPosVetGene(novoGen, vetPos[i]);
             }
-            return true;
+            return filhos;
         }
     }
 
@@ -215,6 +213,7 @@ public class Algoritmo {
 
             for (int i = 0; i < vetC.length; i++) {
                 this.vetC[i] = new Cromossomo(cromossomos[i]);
+                this.vetC[i].posVet = i;
                 if (primeiro) {
                     this.top1 = this.vetC[i];
                     primeiro = false;
@@ -253,9 +252,9 @@ public class Algoritmo {
 
             pais[0] = torneio(pop, numPart);
 
-//            do {
-//                pais[1] = torneio(pop, numPart);
-//            } while (pais[0].getFitness() == pais[1].getFitness());
+            do {
+                pais[1] = torneio(pop, numPart);
+            } while (pais[0].getFitness() == pais[1].getFitness());
 
             for (int i = 0; i < pais.length; i++) {
                 pais[1] = torneio(pop, numPart);
@@ -365,27 +364,46 @@ public class Algoritmo {
             int cont = 0;
             int countMut = 0;
             int countIns = 0;
+            boolean flagMutacao = true;
 
-            Cromossomo[] pais, filhos;
+            Cromossomo[] pais, filhos, filhosAux;
             Resultado result = new Resultado();
             result.setTop1(populacao.getTop1());
 
             do {
                 pais = Selecao.setPaisPorTorneio(populacao, 3);
                 filhos = Cruzamento.Cruz(pais);
-                boolean condMut = Mutacao.Mut(filhos, 1, 1, 3);
-                boolean condIns = Insercao.Ins(populacao, pais, filhos, mat, result, vetCor);
 
-                if(condMut){
+                if(1 >= (int) (Math.random() * 100)){
+                    flagMutacao = true;
                     countMut++;
+                } else {
+                    flagMutacao = false;
                 }
+
+                filhosAux = Mutacao.Mut(filhos, 1, flagMutacao, 3);
+
+                filhosAux[0].fitness = Coisas.verificaColisao(mat, filhosAux[0].vet);
+                filhosAux[1].fitness = Coisas.verificaColisao(mat, filhosAux[1].vet);
+
+                boolean condIns = Insercao.Ins(populacao, pais, filhosAux, mat, result, vetCor);
+
+//                if(populacao.top1.fitness < filhosAux[0].fitness){
+////                    populacao.top1 = filhosAux[0];
+////                }
+////                if(populacao.top1.fitness < filhosAux[1].fitness){
+////                    populacao.top1 = filhosAux[1];
+////                }
+
                 if(condIns){
                     countIns++;
                 }
 
                 cont++;
             } while ((System.nanoTime()-startTime)< duracaoLoop*60*NANOSEC_PER_SEC);
+
             vetResultado[j] = result;
+            System.out.println("\nQuantidade de loops feitos: " + cont);
             System.out.println("\nNumero de Mutaçoes: " + countMut + "\nNumero de Inserções: " + countIns);
             System.out.println(result);
         }

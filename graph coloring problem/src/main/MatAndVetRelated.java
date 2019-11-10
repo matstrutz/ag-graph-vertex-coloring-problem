@@ -113,4 +113,20 @@ public class MatAndVetRelated {
 
         return cont / 2;
     }
+
+    public static boolean verificarIdentico(int[] vetA, int[] vetB){
+        int cont = 0;
+
+        for (int i = 0; i < vetA.length; i++) {
+            if (vetA[i] == vetB[i]) {
+                cont++;
+            }
+        }
+
+        if (cont == vetA.length){
+            return true;
+        }
+
+        return false;
+    }
 }

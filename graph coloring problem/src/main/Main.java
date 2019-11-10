@@ -6,7 +6,7 @@ public class Main {
     final static long startTime = System.nanoTime();
     final static int qtdCores = 3; //MAIOR QUE 3 PARA QUE FUNCIONE
     final static int tamPopulacao = 100;
-    final static int duracaoMin = 5; //Duração em minutos do loop
+    final static int duracaoMin = 1; //Duração em minutos do loop
 
     public static void main(String[] args) {
         long startTime = System.nanoTime();
