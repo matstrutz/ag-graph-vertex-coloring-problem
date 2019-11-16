@@ -4,6 +4,7 @@ public class MatAndVetRelated {
 
     public static int[][] matrizTeste(){
         return new int[][]{
+        		{ 11, 20 },
                 { 1, 2 },
                 { 1, 4 },
                 { 1, 7 },
@@ -25,13 +26,6 @@ public class MatAndVetRelated {
                 { 9, 11 },
                 { 10, 11 },
         };
-
-//        return new int[][]{
-//                { 1, 2 },
-//                { 1, 3 },
-//                { 2, 3 },
-//                { 3, 4 },
-//        };
     }
 
     public static void printarMatrizPadrao(int matriz[][]){
@@ -112,21 +106,5 @@ public class MatAndVetRelated {
         }
 
         return cont / 2;
-    }
-
-    public static boolean verificarIdentico(int[] vetA, int[] vetB){
-        int cont = 0;
-
-        for (int i = 0; i < vetA.length; i++) {
-            if (vetA[i] == vetB[i]) {
-                cont++;
-            }
-        }
-
-        if (cont == vetA.length){
-            return true;
-        }
-
-        return false;
     }
 }

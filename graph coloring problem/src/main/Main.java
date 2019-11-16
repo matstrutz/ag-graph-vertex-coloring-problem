@@ -1,30 +1,28 @@
 package main;
 
-import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Collections;
 
 public class Main {
-    final static long startTime = System.nanoTime();
     final static int qtdCores = 3; //MAIOR QUE 3 PARA QUE FUNCIONE
     final static int tamPopulacao = 100;
-    final static int duracaoMin = 1; //Dura√ß√£o em minutos do loop
+    final static int participToeneio = 4; //Se n„o for um numero par sera arrendodado para cima 
 
     public static void main(String[] args) {
-        long startTime = System.nanoTime();
         int[][] matrizCarregada = MatAndVetRelated.matrizTeste();
 
         Cromossomo[] cromossomos = new Cromossomo[tamPopulacao];
 
-        int[] vetCorPar = new int[matrizCarregada[matrizCarregada.length-1][matrizCarregada[0].length-1]];
-        vetCorPar = MatAndVetRelated.popularCores(vetCorPar, qtdCores);
+        cromossomos = loopPopulacao(matrizCarregada, cromossomos);
 
-        Cromossomo[] cromossomo = loopPopulacao(matrizCarregada, cromossomos);
+        Cromossomo melhorCromossomo = verificarMelhor(cromossomos);
 
-        Algoritmo.Resultado[] vetResultado = new Algoritmo.Resultado[1];
-        Algoritmo.loopAg(matrizCarregada, vetResultado, vetCorPar, cromossomo, qtdCores, startTime, duracaoMin);
+        LoopAg(cromossomos, melhorCromossomo, participToeneio);
+
     }
 
-    public static Cromossomo resultado(int[][] matrizCarregada){
-        int[] vetCorPar = new int[matrizCarregada[matrizCarregada.length-1][matrizCarregada[0].length-1]];
+    public static Cromossomo criarCromossomo(int[][] matrizCarregada){
+        int[] vetCorPar = new int[matrizCarregada[0][0]];
 
         Cromossomo cromossomo = new Cromossomo();
 
@@ -44,13 +42,13 @@ public class Main {
 
     public static int verificaColisao(int[][] matCarregada, int[] vetCor){
         int cont = 0;
-        for (int[] mat : matCarregada) {
-            int[] vetAux = new int[2];
+        for (int i = 1; i < matCarregada.length; i++) {
+            int [] vetAux = new int[2];
             for (int j = 0; j < matCarregada[0].length; j++) {
-                vetAux[j] = mat[j];
+                vetAux[j] = matCarregada[i][j];
             }
 
-            if (vetCor[vetAux[0] - 1] == vetCor[vetAux[1] - 1]) {
+            if(vetCor[vetAux[0] - 1] == vetCor[vetAux[1] - 1]){
                 cont++;
             }
         }
@@ -61,9 +59,57 @@ public class Main {
     public static Cromossomo[] loopPopulacao(int[][] matrizCarregada, Cromossomo[] cromossomos){
         for (int i = 0; i < cromossomos.length; i++) {
             System.out.print(CoisasBobas.inteiroFormatado(i + 1) + " -");
-            cromossomos[i] = resultado(matrizCarregada);
+            cromossomos[i] = criarCromossomo(matrizCarregada);
+        }
+        
+        return cromossomos;
+    }
+    
+    public static Cromossomo verificarMelhor(Cromossomo[] populacao) {
+    	Cromossomo melhorCromossomo = new Cromossomo();
+    	
+    	for (int i = 0; i < populacao.length; i++) {
+			if(i == 0) {
+				melhorCromossomo = populacao[i];
+			}
+			if(populacao[i].getFitness() < melhorCromossomo.getFitness()) {
+				melhorCromossomo = populacao[i];
+			}
+		}
+    	
+    	return melhorCromossomo;
+    }
+    
+    public static Cromossomo torneio (Cromossomo[] populacao, int participantes) {
+    	Cromossomo[] pais = new Cromossomo[CoisasBobas.arredondarParaCima(participantes)];
+
+        ArrayList<Integer> list = new ArrayList<>();
+        for (int i=1; i<populacao.length; i++) {
+            list.add(i - 1);
+        }
+        Collections.shuffle(list);
+        for (int i=0; i<pais.length; i++) {
+            pais[i] = populacao[list.get(i)];
         }
 
-        return cromossomos;
+    	return verificarMelhor(pais);
+    }
+    
+    public static void LoopAg(Cromossomo[] populacao, Cromossomo melhorCromossomo, int numParticipantes) {
+
+//    	TODO Parado enquanto n„o tenho todo o loop pronto, fazendo um loop de 10 iteraÁıes apenas para testes
+//    	do {
+//    		
+//    	} while (melhorCromossomo.getFitness() != 0);
+    	
+    	int count = 0;
+    	
+    	do {
+    	    Cromossomo paiA = torneio(populacao, numParticipantes);
+            Cromossomo paiB = torneio(populacao, numParticipantes);
+    		
+    		count++;
+    	} while (count < 11);
+    	
     }
 }

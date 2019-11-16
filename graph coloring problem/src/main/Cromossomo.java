@@ -31,5 +31,4 @@ public class Cromossomo {
     public void setFitness(int fitness) {
         this.fitness = fitness;
     }
-
 }
