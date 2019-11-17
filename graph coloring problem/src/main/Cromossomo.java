@@ -7,6 +7,16 @@ public class Cromossomo {
 
     private int fitness;
 
+    private int posicao;
+
+    public void setPosicao(int posicao) {
+        this.posicao = posicao;
+    }
+
+    public int getPosicao() {
+        return posicao;
+    }
+
     public int[] getCromossomo() {
         int vet[] = new int[cromossomo.size()];
         for (int i = 0; i < cromossomo.size(); i++) {

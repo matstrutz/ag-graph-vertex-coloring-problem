@@ -6,7 +6,9 @@ import java.util.Collections;
 public class Main {
     final static int qtdCores = 3; //MAIOR QUE 3 PARA QUE FUNCIONE
     final static int tamPopulacao = 100;
-    final static int participToeneio = 4; //Se não for um numero par sera arrendodado para cima 
+    final static int participToeneio = 4; //Se não for um numero par sera arrendodado para cima
+    final static int chanceMutacao = 1; //Se não for um numero par sera arrendodado para cima
+
 
     public static void main(String[] args) {
         int[][] matrizCarregada = MatAndVetRelated.matrizTeste();
@@ -17,7 +19,7 @@ public class Main {
 
         Cromossomo melhorCromossomo = verificarMelhor(cromossomos);
 
-        LoopAg(cromossomos, melhorCromossomo, participToeneio);
+        LoopAg(cromossomos, melhorCromossomo, participToeneio, matrizCarregada);
 
     }
 
@@ -60,6 +62,7 @@ public class Main {
         for (int i = 0; i < cromossomos.length; i++) {
             System.out.print(CoisasBobas.inteiroFormatado(i + 1) + " -");
             cromossomos[i] = criarCromossomo(matrizCarregada);
+            cromossomos[i].setPosicao(i);
         }
         
         return cromossomos;
@@ -94,22 +97,110 @@ public class Main {
 
     	return verificarMelhor(pais);
     }
-    
-    public static void LoopAg(Cromossomo[] populacao, Cromossomo melhorCromossomo, int numParticipantes) {
 
-//    	TODO Parado enquanto não tenho todo o loop pronto, fazendo um loop de 10 iterações apenas para testes
-//    	do {
-//    		
-//    	} while (melhorCromossomo.getFitness() != 0);
-    	
-    	int count = 0;
+    public static Cromossomo mascara(Cromossomo paiA, Cromossomo paiB){
+        Cromossomo filho = new Cromossomo();
+
+        int[] vetAux = new int[paiA.getCromossomo().length];
+
+        int[] paiAgenes = paiA.getCromossomo();
+        int[] paiBgenes = paiB.getCromossomo();
+
+        for (int i = 0; i < vetAux.length; i++) {
+            if((int)(Math.random()*2) == 0){
+                vetAux[i] = paiAgenes[i];
+            } else {
+                vetAux[i] = paiBgenes[i];
+            }
+        }
+
+        filho.setCromossomo(vetAux);
+
+        return filho;
+    }
+
+    public static boolean ocorrerMutacao(int chance){
+        if(chance>(int)(Math.random()*100)) {
+            return true;
+        }
+        return false;
+    }
+
+    public static Cromossomo mutacao(Cromossomo filho){
+        int[] listaGene = new int[filho.getCromossomo().length];
+
+        listaGene[(int)(Math.random()*listaGene.length)] = ((int)(Math.random()*qtdCores) + 1);
+
+        filho.setCromossomo(listaGene);
+
+        return filho;
+    }
+
+    public static Cromossomo[] insercao(Cromossomo[] populacao, Cromossomo paiA, Cromossomo paiB, Cromossomo filhoA, Cromossomo filhoB){
+        Cromossomo piorPai;
+        Cromossomo melhorFilho;
+
+        if(paiA.getFitness() >= paiB.getFitness()){
+            piorPai = paiA;
+        } else {
+            piorPai = paiB;
+        }
+
+        if(filhoA.getFitness() >= filhoB.getFitness()){
+            melhorFilho = filhoA;
+        } else {
+            melhorFilho = filhoB;
+        }
+
+        if(piorPai.getFitness() <= melhorFilho.getFitness()){
+            return populacao;
+        } else if(piorPai.getCromossomo().equals(melhorFilho.getCromossomo())){
+            return populacao;
+        } else {
+            melhorFilho.setPosicao(piorPai.getPosicao());
+
+            populacao[melhorFilho.getPosicao()] = melhorFilho;
+        }
+
+        return populacao;
+    }
+
+    public static void LoopAg(Cromossomo[] populacao, Cromossomo melhorCromossomo, int numParticipantes, int[][] matriz) {
+
+        int contMutacao = 0;
     	
     	do {
     	    Cromossomo paiA = torneio(populacao, numParticipantes);
             Cromossomo paiB = torneio(populacao, numParticipantes);
+
+            Cromossomo filhoA = mascara(paiA, paiB);
+            filhoA.setFitness(verificaColisao(matriz, filhoA.getCromossomo()));
+            Cromossomo filhoB = mascara(paiA, paiB);
+            filhoB.setFitness(verificaColisao(matriz, filhoB.getCromossomo()));
+
+
+            if(ocorrerMutacao(chanceMutacao)){
+                filhoA = mutacao(filhoA);
+                filhoA.setFitness(verificaColisao(matriz, filhoA.getCromossomo()));
+                contMutacao++;
+            }
+
+            if(ocorrerMutacao(chanceMutacao)){
+                filhoB = mutacao(filhoB);
+                filhoB.setFitness(verificaColisao(matriz, filhoB.getCromossomo()));
+                contMutacao++;
+            }
+
+            populacao = insercao(populacao, paiA, paiB, filhoA, filhoB);
+
+            Cromossomo melhorAtual = verificarMelhor(populacao);
+
+            if(melhorAtual.getFitness() < melhorCromossomo.getFitness()){
+                melhorCromossomo = melhorAtual;
+            }
     		
-    		count++;
-    	} while (count < 11);
-    	
+    	} while ((melhorCromossomo.getFitness() != 0));
+
+    	System.out.println(melhorCromossomo.getFitness());
     }
 }
