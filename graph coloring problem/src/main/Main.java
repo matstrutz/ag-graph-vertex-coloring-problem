@@ -201,6 +201,12 @@ public class Main {
     		
     	} while ((melhorCromossomo.getFitness() != 0));
 
-    	System.out.println(melhorCromossomo.getFitness());
+    	System.out.println("");
+        System.out.println("Melhor Cromossomo");
+        System.out.println("");
+
+    	System.out.print(CoisasBobas.inteiroFormatado(melhorCromossomo.getPosicao() + 1) + " -");
+    	MatAndVetRelated.printarVetorPadrao(melhorCromossomo.getCromossomo());
+        System.out.print("- " + CoisasBobas.inteiroFormatado(melhorCromossomo.getFitness()));
     }
 }
