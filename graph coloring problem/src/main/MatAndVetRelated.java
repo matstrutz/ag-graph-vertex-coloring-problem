@@ -81,8 +81,11 @@ public class MatAndVetRelated {
         return vetColorido;
     }
 
-    public static int[][] montarMatrizAdjacente(int [][] matrizAdjavente, int [][] matrizCarregada){
-        for (int i = 0; i < matrizCarregada.length; i++) {
+    public static int[][] montarMatrizAdjacente(int [][] matrizCarregada){
+
+        int [][] matrizAdjavente = new int[matrizCarregada[0][0]][matrizCarregada[0][0]];
+
+        for (int i = 1; i < matrizCarregada.length; i++) {
             int [] vet = new int[matrizCarregada[0].length];
             for (int j = 0; j < matrizCarregada[0].length; j++) {
                 vet[j] = matrizCarregada[i][j];

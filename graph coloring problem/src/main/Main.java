@@ -7,8 +7,7 @@ public class Main {
     final static int qtdCores = 3; //MAIOR QUE 3 PARA QUE FUNCIONE
     final static int tamPopulacao = 100;
     final static int participToeneio = 4; //Se não for um numero par sera arrendodado para cima
-    final static int chanceMutacao = 1; //Se não for um numero par sera arrendodado para cima
-
+    final static int chanceMutacao = 1;
 
     public static void main(String[] args) {
         int[][] matrizCarregada = MatAndVetRelated.matrizTeste();
@@ -19,7 +18,9 @@ public class Main {
 
         Cromossomo melhorCromossomo = verificarMelhor(cromossomos);
 
-        LoopAg(cromossomos, melhorCromossomo, participToeneio, matrizCarregada);
+        int [][] matrizAdjacente = MatAndVetRelated.montarMatrizAdjacente(matrizCarregada);
+
+        LoopAg(cromossomos, melhorCromossomo, participToeneio, matrizCarregada, matrizAdjacente);
 
     }
 
@@ -126,10 +127,29 @@ public class Main {
         return false;
     }
 
-    public static Cromossomo mutacao(Cromossomo filho){
-        int[] listaGene = new int[filho.getCromossomo().length];
+    public static Cromossomo mutacao(Cromossomo filho, int[][] matrizAdjacente){
+        int[] listaGene = filho.getCromossomo();
 
-        listaGene[(int)(Math.random()*listaGene.length)] = ((int)(Math.random()*qtdCores) + 1);
+        int posicao = 0, valorAux = 0, valorMutacao = 0;
+
+        for (int i = 0; i < matrizAdjacente.length; i++) {
+            for (int j = 0; j < matrizAdjacente[0].length; j++) {
+                if(matrizAdjacente[i][j] == 1){
+                    if(listaGene[i] == listaGene[j]){
+                        posicao = j;
+                        valorAux = listaGene[j];
+                        i = matrizAdjacente.length;
+                        j = matrizAdjacente[0].length;
+                    }
+                }
+            }
+        }
+
+        do{
+            valorMutacao = ((int)(Math.random()*qtdCores) + 1);
+        }while(valorAux == valorMutacao);
+
+        listaGene[posicao] = valorMutacao;
 
         filho.setCromossomo(listaGene);
 
@@ -152,42 +172,42 @@ public class Main {
             melhorFilho = filhoB;
         }
 
-        if(piorPai.getFitness() <= melhorFilho.getFitness()){
-            return populacao;
-        } else if(piorPai.getCromossomo().equals(melhorFilho.getCromossomo())){
-            return populacao;
-        } else {
-            melhorFilho.setPosicao(piorPai.getPosicao());
+        if(piorPai.getFitness() > melhorFilho.getFitness()){
+            if(piorPai.getCromossomo().equals(melhorFilho.getCromossomo())){
+                return populacao;
+            } else {
+                melhorFilho.setPosicao(piorPai.getPosicao());
 
-            populacao[melhorFilho.getPosicao()] = melhorFilho;
+                populacao[melhorFilho.getPosicao()] = melhorFilho;
+            }
         }
 
         return populacao;
     }
 
-    public static void LoopAg(Cromossomo[] populacao, Cromossomo melhorCromossomo, int numParticipantes, int[][] matriz) {
+    public static void LoopAg(Cromossomo[] populacao, Cromossomo melhorCromossomo, int numParticipantes, int[][] matrizCarregada, int[][] matrizAdjacente) {
 
         int contMutacao = 0;
+        long startTime = System.nanoTime();
     	
     	do {
     	    Cromossomo paiA = torneio(populacao, numParticipantes);
             Cromossomo paiB = torneio(populacao, numParticipantes);
 
             Cromossomo filhoA = mascara(paiA, paiB);
-            filhoA.setFitness(verificaColisao(matriz, filhoA.getCromossomo()));
+            filhoA.setFitness(verificaColisao(matrizCarregada, filhoA.getCromossomo()));
             Cromossomo filhoB = mascara(paiA, paiB);
-            filhoB.setFitness(verificaColisao(matriz, filhoB.getCromossomo()));
-
+            filhoB.setFitness(verificaColisao(matrizCarregada, filhoB.getCromossomo()));
 
             if(ocorrerMutacao(chanceMutacao)){
-                filhoA = mutacao(filhoA);
-                filhoA.setFitness(verificaColisao(matriz, filhoA.getCromossomo()));
+                filhoA = mutacao(filhoA, matrizAdjacente);
+                filhoA.setFitness(verificaColisao(matrizCarregada, filhoA.getCromossomo()));
                 contMutacao++;
             }
 
             if(ocorrerMutacao(chanceMutacao)){
-                filhoB = mutacao(filhoB);
-                filhoB.setFitness(verificaColisao(matriz, filhoB.getCromossomo()));
+                filhoB = mutacao(filhoB, matrizAdjacente);
+                filhoB.setFitness(verificaColisao(matrizCarregada, filhoB.getCromossomo()));
                 contMutacao++;
             }
 
@@ -200,6 +220,15 @@ public class Main {
             }
     		
     	} while ((melhorCromossomo.getFitness() != 0));
+
+        long endTime = System.nanoTime();
+        long totalTime = endTime - startTime;
+
+        System.out.println("");
+        System.out.println("Duração: " + totalTime/10000000);
+
+        System.out.println("");
+        System.out.println("Quantidade de mutações: " + contMutacao);
 
     	System.out.println("");
         System.out.println("Melhor Cromossomo");
