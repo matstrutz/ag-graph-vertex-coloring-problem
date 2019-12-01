@@ -4,11 +4,34 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class Main {
-    final static int qtdCores = 13; //MAIOR QUE 3 PARA QUE FUNCIONE
+    final static int qtdCores = 99; //MAIOR QUE 3 PARA QUE FUNCIONE
     final static int tamPopulacao = 100;
     final static int participToeneio = 4; //Se não for um numero par sera arrendodado para cima
     final static int chanceMutacao = 1;
     final static long startTime = System.nanoTime();
+
+    /*
+
+    NUMERO DE CORES PARA CADA ARQUIVO
+
+    myciel3.col ----- 4
+    myciel4.col ----- 5
+    queen5_5.col ---- 5
+    queen6_6.col ---- 8
+    myciel5.col ----- 6
+    queen7_7.col ---- 8
+    queen8_8.col ---- 10
+    huck.col -------- 11
+    jean.col -------- 10
+    david.col ------- 11
+    games120.col ---- 9
+    miles250.col ---- 8
+    miles1000.col --- 42
+    anna.col -------- 11
+    fpsol2.i.1.col -- 65
+    homer.col ------- 13
+
+    */
 
 
     public static void main(String[] args) {
@@ -221,8 +244,9 @@ public class Main {
                 melhorCromossomo = melhorAtual;
             }
 
-            System.out.println(melhorCromossomo.getFitness());
-    		
+//            DESCOMENTAR PARA VERIFICAR ANDAMENTO DO MELHOR FITNESS
+//            System.out.println(melhorCromossomo.getFitness());
+
     	} while ((melhorCromossomo.getFitness() != 0));
 
         long endTime = System.nanoTime();
