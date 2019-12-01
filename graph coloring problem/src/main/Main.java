@@ -4,14 +4,16 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class Main {
-    final static int qtdCores = 11; //MAIOR QUE 3 PARA QUE FUNCIONE
+    final static int qtdCores = 13; //MAIOR QUE 3 PARA QUE FUNCIONE
     final static int tamPopulacao = 100;
     final static int participToeneio = 4; //Se não for um numero par sera arrendodado para cima
     final static int chanceMutacao = 1;
+    final static long startTime = System.nanoTime();
+
 
     public static void main(String[] args) {
 
-        int[][] matrizCarregada = ArchiveManipulator.carrega("anna.col.txt");
+        int[][] matrizCarregada = ArchiveManipulator.carrega("homer.col.txt");
 
         Cromossomo[] cromossomos = new Cromossomo[tamPopulacao];
 
@@ -23,6 +25,16 @@ public class Main {
 
         LoopAg(cromossomos, melhorCromossomo, participToeneio, matrizCarregada, matrizAdjacente);
 
+    }
+
+    public static Cromossomo[] loopPopulacao(int[][] matrizCarregada, Cromossomo[] cromossomos){
+        for (int i = 0; i < cromossomos.length; i++) {
+            System.out.print(CoisasBobas.inteiroFormatado(i + 1) + " -");
+            cromossomos[i] = criarCromossomo(matrizCarregada);
+            cromossomos[i].setPosicao(i);
+        }
+
+        return cromossomos;
     }
 
     public static Cromossomo criarCromossomo(int[][] matrizCarregada){
@@ -58,16 +70,6 @@ public class Main {
         }
 
         return cont;
-    }
-
-    public static Cromossomo[] loopPopulacao(int[][] matrizCarregada, Cromossomo[] cromossomos){
-        for (int i = 0; i < cromossomos.length; i++) {
-            System.out.print(CoisasBobas.inteiroFormatado(i + 1) + " -");
-            cromossomos[i] = criarCromossomo(matrizCarregada);
-            cromossomos[i].setPosicao(i);
-        }
-        
-        return cromossomos;
     }
     
     public static Cromossomo verificarMelhor(Cromossomo[] populacao) {
@@ -189,8 +191,7 @@ public class Main {
     public static void LoopAg(Cromossomo[] populacao, Cromossomo melhorCromossomo, int numParticipantes, int[][] matrizCarregada, int[][] matrizAdjacente) {
 
         int contMutacao = 0;
-        long startTime = System.nanoTime();
-    	
+
     	do {
     	    Cromossomo paiA = torneio(populacao, numParticipantes);
             Cromossomo paiB = torneio(populacao, numParticipantes);
@@ -219,6 +220,8 @@ public class Main {
             if(melhorAtual.getFitness() < melhorCromossomo.getFitness()){
                 melhorCromossomo = melhorAtual;
             }
+
+            System.out.println(melhorCromossomo.getFitness());
     		
     	} while ((melhorCromossomo.getFitness() != 0));
 
@@ -226,7 +229,7 @@ public class Main {
         long totalTime = endTime - startTime;
 
         System.out.println("");
-        System.out.println("Duração: " + totalTime/10000000);
+        System.out.println("Duração: " + totalTime);
 
         System.out.println("");
         System.out.println("Quantidade de mutações: " + contMutacao);

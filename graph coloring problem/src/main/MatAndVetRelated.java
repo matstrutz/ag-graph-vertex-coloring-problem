@@ -4,32 +4,6 @@ import java.util.ArrayList;
 
 public class MatAndVetRelated {
 
-    public static int[][] matrizTeste(){
-        return new int[][]{
-        		{ 11, 20 },
-                { 1, 2 },
-                { 1, 4 },
-                { 1, 7 },
-                { 1, 9 },
-                { 2, 3 },
-                { 2, 6 },
-                { 2, 8 },
-                { 3, 5 },
-                { 3, 7 },
-                { 3, 10 },
-                { 4, 5 },
-                { 4, 6 },
-                { 4, 10 },
-                { 5, 8 },
-                { 5, 9 },
-                { 6, 11 },
-                { 7, 11 },
-                { 8, 11 },
-                { 9, 11 },
-                { 10, 11 },
-        };
-    }
-
     public static void printarMatrizPadrao(int matriz[][]){
         for (int i = 0; i < matriz.length; i++) {
             for (int j = 0; j < matriz[0].length; j++) {
@@ -50,15 +24,12 @@ public class MatAndVetRelated {
     public static void printarVetorBonitinho(int vet[]) {
         for (int j = 0; j < vet.length; j++) {
             if(vet[j] >= 0 && vet[j] < 10){
-                System.out.print(" | 000" + vet[j]);
-            }
-            if(vet[j] >= 10 && vet[j] < 100){
                 System.out.print(" | 00" + vet[j]);
             }
-            if(vet[j] >= 100 && vet[j] < 1000){
+            if(vet[j] >= 10 && vet[j] < 100){
                 System.out.print(" | 0" + vet[j]);
             }
-            if(vet[j] >= 1000){
+            if(vet[j] >= 100){
                 System.out.print(" | " + vet[j]);
             }
         }
@@ -140,11 +111,44 @@ public class MatAndVetRelated {
             matrizMontada[i][1] = ladoB.get(i);
         }
 
-        return matrizMontada;
+        return verificaDuplicidade(matrizMontada);
     }
 
-    public static int[][] verificaDuplicidade(){
+    public static int[][] verificaDuplicidade(int[][] matrizDuplicada){
 
-        return new int[1][1];
+        int valorA = 0, valorB = 0;
+
+        for (int i = 1; i < matrizDuplicada.length; i++) {
+            valorA = matrizDuplicada[i][0];
+            valorB = matrizDuplicada[i][1];
+
+            for (int j = 1; j < matrizDuplicada.length; j++) {
+                if(i != j){
+                    if((matrizDuplicada[j][0] == valorA && matrizDuplicada[j][1] == valorB) || (matrizDuplicada[j][1] == valorA && matrizDuplicada[j][0] == valorB)){
+                        matrizDuplicada[j][0] = 0;
+                        matrizDuplicada[j][1] = 0;
+                    }
+                }
+            }
+        }
+
+        ArrayList<Integer> listaA = new ArrayList<>();
+        ArrayList<Integer> listaB = new ArrayList<>();
+
+        for (int i = 0; i < matrizDuplicada.length; i++) {
+            if(!(matrizDuplicada[i][0] == 0 || matrizDuplicada[i][1] == 0)){
+                listaA.add(matrizDuplicada[i][0]);
+                listaB.add(matrizDuplicada[i][1]);
+            }
+        }
+
+        int[][] novaMatriz = new int[listaA.size()][2];
+
+        for (int i = 0; i < listaA.size(); i++) {
+            novaMatriz[i][0] = listaA.get(i);
+            novaMatriz[i][1] = listaB.get(i);
+        }
+
+        return novaMatriz;
     }
 }
