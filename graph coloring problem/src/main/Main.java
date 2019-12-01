@@ -4,13 +4,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class Main {
-    final static int qtdCores = 3; //MAIOR QUE 3 PARA QUE FUNCIONE
+    final static int qtdCores = 11; //MAIOR QUE 3 PARA QUE FUNCIONE
     final static int tamPopulacao = 100;
     final static int participToeneio = 4; //Se não for um numero par sera arrendodado para cima
     final static int chanceMutacao = 1;
 
     public static void main(String[] args) {
-        int[][] matrizCarregada = MatAndVetRelated.matrizTeste();
+
+        int[][] matrizCarregada = ArchiveManipulator.carrega("anna.col.txt");
 
         Cromossomo[] cromossomos = new Cromossomo[tamPopulacao];
 
@@ -33,7 +34,7 @@ public class Main {
 
         int colisao = verificaColisao(matrizCarregada, vetCorPar);
 
-        MatAndVetRelated.printarVetorPadrao(vetCorPar);
+        MatAndVetRelated.printarVetorBonitinho(vetCorPar);
         System.out.print("- " + colisao);
         System.out.println("");
 

@@ -86,12 +86,17 @@
     <property name="OverrideImplement.combined" value="false" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="dynamic.classpath" value="false" />
-    <property name="last_opened_file_path" value="$USER_HOME$/Desktop/AG" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="recentsLimit" value="5" />
     <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
   </component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Mateus\Documents\GitHub\ag-graph-vertex-coloring-problem\graph coloring problem" />
+      <recent name="C:\Users\Mateus\Documents\GitHub\ag-graph-vertex-coloring-problem\graph coloring problem\src" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Mateus\Documents\GitHub\ag-graph-vertex-coloring-problem\graph coloring problem" />
       <recent name="C:\Users\Mateus\Documents\GitHub\ag-graph-vertex-coloring-problem\graph coloring problem\src\main" />
       <recent name="C:\Users\Mateus\Downloads\AG\graph coloring problem\src" />
       <recent name="C:\Users\Mateus\Downloads\AG\graph coloring problem\src\sample" />
@@ -217,7 +222,7 @@
     <option name="INCLUDE_TEXT_INTO_SHELF" value="false" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/graph_coloring_problem$Main.ic" NAME="Main Coverage Results" MODIFIED="1573425740453" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+    <SUITE FILE_PATH="coverage/graph_coloring_problem$Main.ic" NAME="Main Coverage Results" MODIFIED="1575204740247" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
       <FILTER>main.*</FILTER>
     </SUITE>
   </component>

@@ -1,5 +1,7 @@
 package main;
 
+import java.util.ArrayList;
+
 public class MatAndVetRelated {
 
     public static int[][] matrizTeste(){
@@ -42,6 +44,25 @@ public class MatAndVetRelated {
         for (int j = 0; j < vet.length; j++) {
             System.out.print(" | " + vet[j]);
         }
+        System.out.print(" | ");
+    }
+
+    public static void printarVetorBonitinho(int vet[]) {
+        for (int j = 0; j < vet.length; j++) {
+            if(vet[j] >= 0 && vet[j] < 10){
+                System.out.print(" | 000" + vet[j]);
+            }
+            if(vet[j] >= 10 && vet[j] < 100){
+                System.out.print(" | 00" + vet[j]);
+            }
+            if(vet[j] >= 100 && vet[j] < 1000){
+                System.out.print(" | 0" + vet[j]);
+            }
+            if(vet[j] >= 1000){
+                System.out.print(" | " + vet[j]);
+            }
+        }
+
         System.out.print(" | ");
     }
 
@@ -109,5 +130,21 @@ public class MatAndVetRelated {
         }
 
         return cont / 2;
+    }
+
+    public static int[][] arraysCarregadosParaMatriz(ArrayList<Integer> ladoA, ArrayList<Integer> ladoB){
+        int[][] matrizMontada = new int[ladoA.size()][2];
+
+        for (int i = 0; i < ladoA.size(); i++) {
+            matrizMontada[i][0] = ladoA.get(i);
+            matrizMontada[i][1] = ladoB.get(i);
+        }
+
+        return matrizMontada;
+    }
+
+    public static int[][] verificaDuplicidade(){
+
+        return new int[1][1];
     }
 }
