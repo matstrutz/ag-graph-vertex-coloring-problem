@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class Main {
-    final static int qtdCores = 99; //MAIOR QUE 3 PARA QUE FUNCIONE
+    final static int qtdCores = 8; //MAIOR QUE 3 PARA QUE FUNCIONE
     final static int tamPopulacao = 100;
     final static int participToeneio = 4; //Se não for um numero par sera arrendodado para cima
     final static int chanceMutacao = 1;
@@ -16,11 +16,7 @@ public class Main {
 
     myciel3.col ----- 4
     myciel4.col ----- 5
-    queen5_5.col ---- 5
-    queen6_6.col ---- 8
     myciel5.col ----- 6
-    queen7_7.col ---- 8
-    queen8_8.col ---- 10
     huck.col -------- 11
     jean.col -------- 10
     david.col ------- 11
@@ -36,7 +32,7 @@ public class Main {
 
     public static void main(String[] args) {
 
-        int[][] matrizCarregada = ArchiveManipulator.carrega("homer.col.txt");
+        int[][] matrizCarregada = ArchiveManipulator.carrega("miles250.col.txt");
 
         Cromossomo[] cromossomos = new Cromossomo[tamPopulacao];
 
