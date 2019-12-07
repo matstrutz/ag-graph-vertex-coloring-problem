@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class Main {
-    final static int qtdCores = 8; //MAIOR QUE 3 PARA QUE FUNCIONE
+    final static int qtdCores = 4; //MAIOR QUE 3 PARA QUE FUNCIONE
     final static int tamPopulacao = 100;
     final static int participToeneio = 4; //Se não for um numero par sera arrendodado para cima
     final static int chanceMutacao = 1;
-    final static long startTime = System.nanoTime();
+    final static double startTime = System.nanoTime();
 
     /*
 
@@ -32,7 +32,7 @@ public class Main {
 
     public static void main(String[] args) {
 
-        int[][] matrizCarregada = ArchiveManipulator.carrega("miles250.col.txt");
+        int[][] matrizCarregada = ArchiveManipulator.carrega("myciel3.col.txt");
 
         Cromossomo[] cromossomos = new Cromossomo[tamPopulacao];
 
@@ -143,10 +143,7 @@ public class Main {
     }
 
     public static boolean ocorrerMutacao(int chance){
-        if(chance>(int)(Math.random()*100)) {
-            return true;
-        }
-        return false;
+        return chance > (int) (Math.random() * 100);
     }
 
     public static Cromossomo mutacao(Cromossomo filho, int[][] matrizAdjacente){
@@ -180,12 +177,15 @@ public class Main {
 
     public static Cromossomo[] insercao(Cromossomo[] populacao, Cromossomo paiA, Cromossomo paiB, Cromossomo filhoA, Cromossomo filhoB){
         Cromossomo piorPai;
+        Cromossomo melhorPai;
         Cromossomo melhorFilho;
 
         if(paiA.getFitness() >= paiB.getFitness()){
             piorPai = paiA;
+            melhorPai = paiB;
         } else {
             piorPai = paiB;
+            melhorPai = paiA;
         }
 
         if(filhoA.getFitness() >= filhoB.getFitness()){
@@ -194,7 +194,7 @@ public class Main {
             melhorFilho = filhoB;
         }
 
-        if(piorPai.getFitness() > melhorFilho.getFitness()){
+        if(melhorPai.getFitness() > melhorFilho.getFitness()){
             if(piorPai.getCromossomo().equals(melhorFilho.getCromossomo())){
                 return populacao;
             } else {
@@ -213,7 +213,12 @@ public class Main {
 
     	do {
     	    Cromossomo paiA = torneio(populacao, numParticipantes);
-            Cromossomo paiB = torneio(populacao, numParticipantes);
+
+            Cromossomo paiB;
+
+            do{
+                paiB = torneio(populacao, numParticipantes);
+            }while(paiA.equals(paiB));
 
             Cromossomo filhoA = mascara(paiA, paiB);
             filhoA.setFitness(verificaColisao(matrizCarregada, filhoA.getCromossomo()));
@@ -245,11 +250,11 @@ public class Main {
 
     	} while ((melhorCromossomo.getFitness() != 0));
 
-        long endTime = System.nanoTime();
-        long totalTime = endTime - startTime;
+        double endTime = System.nanoTime();
+        double totalTime = endTime - startTime;
 
         System.out.println("");
-        System.out.println("Duração: " + totalTime);
+        System.out.println("Duração: " + totalTime/1000000000);
 
         System.out.println("");
         System.out.println("Quantidade de mutações: " + contMutacao);
