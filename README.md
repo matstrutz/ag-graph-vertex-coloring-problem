@@ -15,6 +15,6 @@ Algoritmo genético para resolver o problema de coloração de vértices
 
 <h5>*Obs: Git não necessario caso queira somente executar o projeto!</h5>
 
-Apenas execute o projeto para velo em funcionamento!
+Apenas execute o projeto para visualiza-lo em funcionamento!
 
 
